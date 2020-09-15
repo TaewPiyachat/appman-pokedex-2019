@@ -3,8 +3,15 @@ import styled from 'styled-components'
 
 import CuteIcon from '../../cute.png'
 import { colors } from '../../contants'
+import {
+    calculateHP,
+    calculateStrength,
+    calculateWeakness,
+    calculateDamage,
+    calculateHappiness,
+} from '../../helpers'
 
-export const Card = ({ data = {} }) => {
+export const Card = ({ data = {}, actionButton }) => {
     const {
         id,
         hp,
@@ -14,6 +21,12 @@ export const Card = ({ data = {} }) => {
         weaknesses,
     } = data
 
+    const _hp = calculateHP(hp)
+    const _str = calculateStrength(attacks)
+    const _wk = calculateWeakness(weaknesses)
+    const _damage = calculateDamage(attacks)
+    const _happiness = calculateHappiness(_hp, _damage, _wk)
+
     return (
         <Root>
             <Image src={ imageUrl } alt={ id } />
@@ -22,41 +35,54 @@ export const Card = ({ data = {} }) => {
                 <Row>
                     <Title>HP</Title>
                     <TubeBackground>
-                        <TubeValue />
+                        <TubeValue value={ _hp } />
                     </TubeBackground>
                 </Row>
                 <Row>
                     <Title>STR</Title>
                     <TubeBackground>
-                        <TubeValue />
+                        <TubeValue value={ _str } />
                     </TubeBackground>
                 </Row>
                 <Row>
                     <Title>WEAK</Title>
                     <TubeBackground>
-                        <TubeValue />
+                        <TubeValue value={_wk  } />
                     </TubeBackground>
                 </Row>
                 <HappinessRow>
-                    <img src={ CuteIcon } alt='happiness-icon' />
-                    <img src={ CuteIcon } alt='happiness-icon' />
-                    <img src={ CuteIcon } alt='happiness-icon' />
+                    {Array.from({ length: _happiness }, (v, i) => i).map(v => (
+                        <img key={`cute-${v}`} src={ CuteIcon } alt='happiness-icon' />
+                    ))}
                 </HappinessRow>
             </Detail>
+            <AddButton id='button' onClick={ () => actionButton.action(data) }>
+                { actionButton.button }
+            </AddButton>
         </Root>
     )
 }
 
 const Root = styled.div`
-    height: 300px;
+    height: 250px;
     background: ${colors.cardBackground};
     display: flex;
     align-items: center;
     margin-bottom: 16px;
     padding: 12px;
+    position: relative;
+    box-shadow: 2px 2px 5px ${colors.cardBoxShadow};
 
     :nth-last-child(1) {
         margin: 0;
+    }
+
+    :hover {
+        box-shadow: 2px 2px 5px ${colors.cardBoxShadowHover};
+    
+        #button {
+            display: block;
+        }
     }
 `
 
@@ -67,6 +93,7 @@ const Image = styled.img`
 const Detail = styled.div`
     height: 100%;
     width: 100%;
+    max-width: 500px;
     display: flex;
     flex-direction: column;
     margin: 16px;
@@ -100,12 +127,24 @@ const TubeBackground = styled.div`
     height: 30px;
     border-radius: 16px;
     background: ${colors.levelTubeBackground};
+    margin-left: 8px;
+    box-shadow: 2px 2px 5px ${colors.levelTubeBoxShadow};
 `
 
 const TubeValue = styled.div`
-  width: 40%;
+  width: ${p => (p.value || 0)}%;
   height: 30px;
   background: red;
   border-radius: 16px;
   background: ${colors.levelTubeValueBackground};
+`
+
+const AddButton = styled.span`
+    display: none;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 24px;
+    color: ${colors.colorAddButton};
+    cursor: pointer;
 `

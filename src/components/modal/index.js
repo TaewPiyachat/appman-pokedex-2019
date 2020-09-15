@@ -7,9 +7,25 @@ import SearchIcon from '../../search.png'
 
 const URL = 'http://localhost:3030/api/cards'
 
-export const Modal = () => {
+export const Modal = ({
+    selectedCard,
+    setSelectedCard,
+    openModal,
+    setOpenModal,
+}) => {
+    const [search, setSearch] = useState('')
     const [cards, setCards] = useState([])
-console.log('cards', cards)
+
+    const _cards = cards.filter(card => {
+        if (selectedCard.find(c => c.id === card.id)) return null
+        if (search !== '') {
+            const _search = search.toLowerCase()
+            if (card.type.toLowerCase().includes(_search) || card.name.toLowerCase().includes(_search)) return card
+            return null
+        }
+        return card
+    })
+
     useEffect(() => {
         fecthData()
     }, [])
@@ -21,22 +37,41 @@ console.log('cards', cards)
         }
     }
 
+    const handleAddCard = card => {
+        setSelectedCard([...selectedCard, card])
+    }
+
+    const handleSearch = e => {
+        setSearch(e.target.value)
+    }
+
     return (
         <Root>
             <Container>
                 <SearchBar>
-                    <input />
+                    <input
+                        placeholder='Find Pokemon'
+                        onChange={ handleSearch }
+                        value={ search }
+                    />
                     <img src={ SearchIcon } alt='search-icon' />
                 </SearchBar>
                 <CardList>
-                    {cards.map(card => {
+                    {_cards.map(card => {
                         return (
-                            <Card key={ card.id } data={ card } />
+                            <Card
+                                key={ card.id }
+                                data={ card }
+                                actionButton={ {
+                                    button: 'Add',
+                                    action: handleAddCard,
+                                } }
+                            />
                         )
                     })}
                 </CardList>
             </Container>
-            {/* <Outside /> */}
+            <Outside onClick={ () => setOpenModal(!openModal) } />
         </Root>
     )
 }
@@ -61,11 +96,13 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 90%;
+  max-width: 85%;
   height: 100%;
   max-height: 90%;
-  background: white;
+  background: ${colors.modalContentBackground};
   padding: 16px;
+  z-index: 10;
+  box-shadow: 2px 2px 5px ${colors.modalContentBoxShadow};
 `
 
 const SearchBar = styled.div`
@@ -94,15 +131,13 @@ const SearchBar = styled.div`
 `
 
 const CardList = styled.div`
-  /* display: flex;
-  flex-direction: column; */
   overflow-y: auto;
 `
 
-// const Outside = styled.div`
-//     position: absolute;
-//     top: 0;
-//     width: 100%;
-//     height: 400px;
-//     background: ${colors.modalOutside};
-// `
+const Outside = styled.div`
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 400px;
+    background: ${colors.modalOutside};
+`

@@ -3,10 +3,10 @@ import styled from 'styled-components'
 
 import { colors } from '../../contants'
 
-export const Footer = () => {
+export const Footer = ({ openModal, setOpenModal }) => {
     return (
         <Root>
-            <AddButton>+</AddButton>
+            <AddButton onClick={ () => setOpenModal(!openModal) }>+</AddButton>
         </Root>
     )
 }
@@ -21,10 +21,10 @@ const Root = styled.div`
 `
 
 const AddButton = styled.div`
-    height: 70px;
-    width: 70px;
+    height: 100px;
+    width: 100px;
     position: absolute;
-    top: -35px;
+    top: -45px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -32,5 +32,6 @@ const AddButton = styled.div`
     background: ${colors.bottomBarBackground};
     box-shadow: 2px 2px 5px ${colors.bottomBarBoxShadow};
     font-size: 60px;
-    color: white;
+    color: ${colors.bottomBarTextColor};
+    cursor: pointer;
 `
