@@ -85,7 +85,6 @@ const Root = styled.div`
     justify-content: center;
     align-items: center;
     z-index: 1;
-    background: ${colors.modalOutside};  
 `
 
 const Container = styled.div`
@@ -138,6 +137,6 @@ const Outside = styled.div`
     position: absolute;
     top: 0;
     width: 100%;
-    height: 400px;
+    height: 100%;
     background: ${colors.modalOutside};
 `

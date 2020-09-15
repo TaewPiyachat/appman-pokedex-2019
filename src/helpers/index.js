@@ -21,6 +21,7 @@ export const calculateDamage = (attacks = []) => {
     attacks.map(attack => {
         const damage = attack.damage.slice(0, -1)
         sum += Number(damage)
+        return attack
     })
     return sum
 }
