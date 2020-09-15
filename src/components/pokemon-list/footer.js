@@ -12,7 +12,7 @@ export const Footer = () => {
 }
 
 const Root = styled.div`
-    height: 50px;
+    height: 70px;
     background: ${colors.bottomBarBackground};
     display: flex;
     justify-content: center;
