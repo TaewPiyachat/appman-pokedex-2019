@@ -8,13 +8,13 @@ export const List = ({ selectedCard, removeCard }) => {
             {selectedCard.map(card => {
                 return (
                     <Card
-                    key={ card.id }
-                    data={ card }
-                    actionButton={ {
-                        button: 'X',
-                        action: removeCard,
-                    } }
-                /> 
+                        key={ card.id }
+                        data={ card }
+                        actionButton={ {
+                            button: 'X',
+                            action: removeCard,
+                        } }
+                    /> 
                 )
             })}
         </Root>
@@ -27,7 +27,7 @@ const Root = styled.div`
     background: white;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-gap: 10px;
+    grid-gap: 0 16px;
     overflow-y: auto;
     padding: 10px;
 `
