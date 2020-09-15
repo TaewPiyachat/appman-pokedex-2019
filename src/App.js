@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import './App.css'
 
+import { PokemonList } from './components/pokemon-list'
+
 const COLORS = {
   Psychic: "#f8a5c2",
   Fighting: "#f0932b",
@@ -19,6 +21,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <PokemonList />
       </div>
     )
   }
