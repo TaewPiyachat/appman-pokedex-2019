@@ -1,11 +1,26 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
 import { Card } from '../card'
 import { colors } from '../../contants'
 import SearchIcon from '../../search.png'
 
+const URL = 'http://localhost:3030/api/cards'
+
 export const Modal = () => {
+    const [cards, setCards] = useState([])
+console.log('cards', cards)
+    useEffect(() => {
+        fecthData()
+    }, [])
+
+    const fecthData = async () => {
+        const res = await fetch(URL).then(r => r.json())
+        if (res.cards) {
+            setCards(res.cards)
+        }
+    }
+
     return (
         <Root>
             <Container>
@@ -14,13 +29,11 @@ export const Modal = () => {
                     <img src={ SearchIcon } alt='search-icon' />
                 </SearchBar>
                 <CardList>
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
+                    {cards.map(card => {
+                        return (
+                            <Card key={ card.id } data={ card } />
+                        )
+                    })}
                 </CardList>
             </Container>
             {/* <Outside /> */}
